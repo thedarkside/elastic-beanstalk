@@ -155,7 +155,7 @@ namespace :eb do
 
     # load the configuration from same dir (for standalone CI purposes) or from the rails config dir if within the rails project
     filename = EbConfig.resolve_path('eb.yml')
-    unless File.exists? filename
+    unless File.exist? filename
       filename = EbConfig.resolve_path('config/eb.yml')
     end
     EbConfig.load!(environment, filename)
@@ -178,7 +178,7 @@ namespace :eb do
     # try to use from task argument first
     version = arg_version
     file = resolve_absolute_package_file
-    if version.nil? && File.exists?(file)
+    if version.nil? && File.exist?(file)
       # otherwise use the MD5 hash of the package file
       version = Digest::MD5.file(file).hexdigest
     end
@@ -306,7 +306,7 @@ namespace :eb do
     package = resolve_absolute_package_file
 
     # check package file
-    raise "Package file not found #{package} (also checked current dir).  Be sure to run the :package task subsequent to any :deploy attempts." if !File.exists? package
+    raise "Package file not found #{package} (also checked current dir).  Be sure to run the :package task subsequent to any :deploy attempts." if !File.exist? package
 
     # Don't deploy to test or cucumber (or whatever is specified by :disallow_environments)
     raise "#{EbConfig.environment} is one of the #{EbConfig.disallow_environments} disallowed environments.  Configure it by changing the :disallow_environments in the eb.yml" if EbConfig.disallow_environments.include? EbConfig.environment
@@ -405,7 +405,7 @@ namespace :eb do
 
   # validate file exists
   def credentials!
-    raise "\nFailed to load AWS secrets: #{aws_secrets_file}.\nFile contents should look like:\naccess_key_id: XXXX\nsecret_access_key: XXXX\n\n" unless File.exists?(aws_secrets_file)
+    raise "\nFailed to load AWS secrets: #{aws_secrets_file}.\nFile contents should look like:\naccess_key_id: XXXX\nsecret_access_key: XXXX\n\n" unless File.exist?(aws_secrets_file)
     credentials
 
     ['access_key_id', 'secret_access_key'].each do |key|
@@ -429,7 +429,7 @@ namespace :eb do
 
     # first see if it is in the current dir, i.e. CI environment where the generated rakefile and pkg is dropped in the same place
     file = EbConfig.resolve_path(package_file_name)
-    return file if File.exists? file
+    return file if File.exist? file
 
     file = EbConfig.resolve_path(package_file)
     return file
